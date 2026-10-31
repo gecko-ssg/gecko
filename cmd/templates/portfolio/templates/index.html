@@ -1,0 +1,11 @@
+{{define "content"}}
+<section class="hero">
+  <div class="hero-copy"><p class="eyebrow">HELLO, I'M {{.Profile.Name}}</p><h1>{{.Profile.Headline}}</h1><p class="hero-description">{{.Profile.Bio}}</p><div class="social-links">{{range .Profile.Socials}}<a href="{{.URL}}" target="_blank" rel="noopener noreferrer">{{.Name}} ↗</a>{{end}}</div></div>
+  {{if .Profile.Image}}<img class="profile-image" src="{{.Site.BaseURL}}{{.Profile.Image}}" alt="{{.Profile.Name}}">{{end}}
+</section>
+<section id="projects" class="section"><div class="section-heading"><div><p class="eyebrow">SELECTED WORK</p><h2>Projects</h2></div><a href="{{.Site.BaseURL}}/projects/">View all ↗</a></div><div class="card-grid">{{range .Projects}}<article class="card">{{if .Image}}<a href="{{.URL}}" class="card-image-link"><img src="{{$.Site.BaseURL}}{{.Image}}" alt=""></a>{{end}}<div class="card-body"><h3><a href="{{.URL}}">{{.Title}} ↗</a></h3><p>{{.Description}}</p>{{if .Technologies}}<div class="tags">{{range .Technologies}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}</div></article>{{end}}</div></section>
+<section id="experience" class="section"><div class="section-heading"><div><p class="eyebrow">WHAT I'VE DONE</p><h2>Experience</h2></div></div><div class="timeline">{{range .Experience}}<article class="timeline-item"><div><h3>{{.Role}}</h3><p class="muted">{{.Company}}</p></div><p class="timeline-date">{{.Period}}</p><p class="timeline-description">{{.Description}}</p></article>{{end}}</div></section>
+<section id="writing" class="section"><div class="section-heading"><div><p class="eyebrow">THOUGHTS & NOTES</p><h2>Recent writing</h2></div><a href="{{.Site.BaseURL}}/blog/">All posts ↗</a></div><div class="post-list">{{range .RecentPosts}}<article class="post-item"><div><h3><a href="{{.URL}}">{{.Title}}</a></h3><p>{{.Description}}</p></div><time>{{.Date.Format "Jan 2006"}}</time></article>{{end}}</div></section>
+<section class="contact section"><p class="eyebrow">HAVE SOMETHING IN MIND?</p><h2>Let's build something.</h2><p>Interested in collaborating? Get in touch.</p>{{if .Profile.Email}}<a class="button" href="mailto:{{.Profile.Email}}">Contact me →</a>{{end}}</section>
+{{end}}
+{{template "base" .}}

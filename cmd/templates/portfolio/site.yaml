@@ -1,0 +1,25 @@
+site:
+  title: "__GECKO_SITE_TITLE__"
+  description: "__GECKO_SITE_DESCRIPTION__"
+  language: "__GECKO_LANGUAGE__"
+  author: "__GECKO_AUTHOR__"
+  year: 2026
+  url: "__GECKO_SITE_URL__"
+  baseURL: "__GECKO_BASE_URL__"
+  logo: "/favicon.ico"
+  postsDir: "__GECKO_POSTS_DIR__"
+  timezone: "__GECKO_TIMEZONE__"
+  seo:
+    title: "__GECKO_SITE_TITLE__"
+    description: "__GECKO_SITE_DESCRIPTION__"
+    keywords: ["Portfolio", "Open Source", "Go", "Web Development"]
+    robots: "index, follow"
+    image: "/favicon.ico"
+    imageAlt: "__GECKO_SITE_TITLE__ portfolio"
+    imageWidth: 1200
+    imageHeight: 630
+    openGraph: { type: "website", locale: "en_US", siteName: "__GECKO_SITE_TITLE__" }
+    twitter: { card: "summary_large_image", site: "", creator: "" }
+    verification: { google: "", bing: "" }
+  theme: { color: "#ffffff", accent: "#087ea4", scheme: "light" }
+  socials: { github: "", linkedin: "", x: "" }

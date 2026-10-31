@@ -1,0 +1,37 @@
+{{define "base"}}
+<!doctype html>
+<html lang="{{.Site.Language}}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{if .Title}}{{.Title}} · {{.Site.Title}}{{else}}{{.Site.SEO.Title}}{{end}}</title>
+    <meta name="description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
+    <meta name="author" content="{{.Site.Author}}">
+    <meta name="robots" content="{{if .Robots}}{{.Robots}}{{else}}{{.Site.SEO.Robots}}{{end}}">
+    {{if .Canonical}}<link rel="canonical" href="{{.Canonical}}">{{else if .URL}}<link rel="canonical" href="{{.Site.URL}}{{.URL}}">{{end}}
+    <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}{{.Site.SEO.Title}}{{end}}">
+    <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
+    <meta property="og:type" content="{{if .OGType}}{{.OGType}}{{else}}{{.Site.SEO.OpenGraph.Type}}{{end}}">
+    <meta property="og:site_name" content="{{.Site.SEO.OpenGraph.SiteName}}">
+    <meta property="og:locale" content="{{.Site.SEO.OpenGraph.Locale}}">
+    <meta property="og:image" content="{{.Site.URL}}{{if .Image}}{{.Image}}{{else}}{{.Site.SEO.Image}}{{end}}">
+    <meta name="twitter:card" content="{{.Site.SEO.Twitter.Card}}">
+    <meta name="twitter:title" content="{{if .Title}}{{.Title}}{{else}}{{.Site.SEO.Title}}{{end}}">
+    <meta name="twitter:description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
+    <meta name="theme-color" content="{{.Site.Theme.Color}}">
+    <link rel="stylesheet" href="{{.Site.BaseURL}}/assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="{{.Site.BaseURL}}/favicon.ico">
+    {{block "head" .}}{{end}}
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav container" aria-label="Main navigation">
+        <a class="brand" href="{{.Site.BaseURL}}/"><img class="brand-logo" src="{{.Site.BaseURL}}{{.Site.Logo}}" alt="">{{.Site.Title}}</a>
+        <div class="nav-links"><a href="{{.Site.BaseURL}}/#projects">Projects</a><a href="{{.Site.BaseURL}}/#experience">Experience</a><a href="{{.Site.BaseURL}}/#writing">Writing</a><a href="{{.Site.BaseURL}}/blog/">Blog</a></div>
+      </nav>
+    </header>
+    <main class="container">{{template "content" .}}</main>
+    <footer class="site-footer container"><span>© {{.Site.Year}} {{.Site.Author}}</span><a href="{{.Site.BaseURL}}/sitemap.xml">Sitemap</a></footer>
+  </body>
+</html>
+{{end}}
