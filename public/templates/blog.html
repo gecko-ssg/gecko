@@ -1,0 +1,4 @@
+{{define "content"}}
+<section class="article"><header class="article-header"><h1>{{.Title}}</h1>{{if .Description}}<p class="article-description">{{.Description}}</p>{{end}}</header><div class="post-list">{{range .Posts}}<article class="post-item"><div><h3><a href="{{.URL}}">{{.Title}}</a></h3><p>{{.Description}}</p></div><time>{{.Date.Format "Jan 2006"}}</time></article>{{end}}</div></section>
+{{end}}
+{{template "base" .}}

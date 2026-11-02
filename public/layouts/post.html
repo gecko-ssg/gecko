@@ -1,0 +1,14 @@
+{{define "content"}}
+<article class="article">
+  <header class="article-header">
+    <a class="back-link" href="{{.Site.BaseURL}}/blog/">← All posts</a>
+    <p class="eyebrow">{{.Date.Format "2 January 2006"}}{{if .ReadingTime}} · {{.ReadingTime}} min read{{end}}</p>
+    <h1>{{.Title}}</h1>
+    {{if .Description}}<p class="article-description">{{.Description}}</p>{{end}}
+    {{if .Tags}}<div class="tags">{{range .Tags}}<span class="tag">{{.}}</span>{{end}}</div>{{end}}
+  </header>
+  <div class="article-content">{{.Content}}</div>
+  <footer class="article-footer"><a href="{{.Site.BaseURL}}/blog/">← Back to writing</a></footer>
+</article>
+{{end}}
+{{template "base" .}}
