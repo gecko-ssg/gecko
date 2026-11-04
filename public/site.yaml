@@ -5,7 +5,7 @@ site:
   author: "Gecko contributors"
   year: 2026
   url: ""
-  baseURL: ""
+  baseURL: "/gecko"
   logo: "/favicon.ico"
   postsDir: "content/posts"
   timezone: "Asia/Kolkata"
