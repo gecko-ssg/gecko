@@ -22,4 +22,28 @@ site:
     twitter: { card: "summary_large_image", site: "", creator: "" }
     verification: { google: "", bing: "" }
   theme: { color: "#ffffff", accent: "#087ea4", scheme: "light" }
-  socials: { github: "", linkedin: "", x: "" }
+
+profile:
+  name: "Your Name"
+  headline: "Software Engineer"
+  bio: "Add a short introduction about yourself."
+  image: ""
+  email: ""
+  socials:
+    github: ""
+    linkedin: ""
+    x: ""
+
+projects:
+  - name: "Project One"
+    description: "A short project description."
+    url: "https://example.com"
+    technologies:
+      - Go
+      - TypeScript
+
+experience:
+  - company: "Company Name"
+    role: "Software Engineer"
+    period: "2025 - Present"
+    description: "Add a short description of your work."
