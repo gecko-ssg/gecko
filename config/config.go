@@ -59,12 +59,18 @@ type Theme struct {
 
 // Profile contains the portfolio owner information.
 type Profile struct {
-	Name     string            `yaml:"name"`
-	Headline string            `yaml:"headline"`
-	Bio      string            `yaml:"bio"`
-	Image    string            `yaml:"image"`
-	Email    string            `yaml:"email"`
-	Socials  map[string]string `yaml:"socials"`
+	Name     string       `yaml:"name"`
+	Headline string       `yaml:"headline"`
+	Bio      string       `yaml:"bio"`
+	Image    string       `yaml:"image"`
+	Email    string       `yaml:"email"`
+	Socials  []SocialLink `yaml:"socials"`
+}
+
+// SocialLink is an ordered profile link displayed by the portfolio template.
+type SocialLink struct {
+	Name string `yaml:"name"`
+	URL  string `yaml:"url"`
 }
 
 // Project is a project shown in the portfolio template.

@@ -30,9 +30,12 @@ profile:
   image: ""
   email: ""
   socials:
-    github: ""
-    linkedin: ""
-    x: ""
+    - name: "GitHub"
+      url: ""
+    - name: "LinkedIn"
+      url: ""
+    - name: "X"
+      url: ""
 
 projects:
   - name: "Project One"

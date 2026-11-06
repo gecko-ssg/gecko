@@ -71,6 +71,24 @@ root.
 Avoid editing `dist/` directly: `gecko build` recreates it from the source
 directories.
 
+### Change page structure
+
+Edit the HTML template files to change what each page contains:
+
+- `layouts/base.html` defines the document shell shared by the site, including
+  the `<head>`, navigation, main area, and footer.
+- `templates/index.html` defines the homepage sections.
+- `templates/blog.html` defines the posts listing.
+- `templates/page.html` defines standard content pages.
+- `layouts/post.html` defines individual posts.
+
+Each page template defines a `content` block and renders it inside the `base`
+layout. Change the shared navigation or footer in `layouts/base.html`; change a
+page's sections or markup in its template. To use a different template for a
+Markdown page, set its front matter `template` value to the filename without
+`.html` (for example, `template: about` selects `templates/about.html`). The
+special `post` template uses `layouts/post.html`.
+
 ### Configure portfolio content
 
 The starter portfolio reads its profile, project cards, and experience timeline
@@ -85,9 +103,12 @@ profile:
   image: "/images/profile.png"
   email: "hello@example.com"
   socials:
-    github: "https://github.com/username"
-    linkedin: "https://linkedin.com/in/username"
-    x: "https://x.com/username"
+    - name: GitHub
+      url: "https://github.com/username"
+    - name: LinkedIn
+      url: "https://linkedin.com/in/username"
+    - name: X
+      url: "https://x.com/username"
 
 projects:
   - name: "Project One"
