@@ -6,7 +6,6 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"html"
 	"html/template"
 	"io"
 	"os"
@@ -16,6 +15,7 @@ import (
 	"time"
 
 	"github.com/gecko-ssg/gecko/config"
+	"github.com/gecko-ssg/gecko/internal/markdown"
 	"github.com/spf13/cobra"
 )
 
@@ -42,6 +42,8 @@ type sourcePage struct {
 	Date                                                                       time.Time
 	Tags                                                                       []string
 	Body, SourcePath                                                           string
+	RenderedHTML                                                               template.HTML
+	Draft                                                                      bool
 }
 
 var buildCmd = &cobra.Command{
@@ -112,7 +114,7 @@ func buildSiteTo(root, dist string) error {
 			ImageAlt:    page.ImageAlt,
 			Date:        page.Date,
 			Tags:        page.Tags,
-			Content:     template.HTML(renderMarkdown(page.Body)),
+			Content:     page.RenderedHTML,
 			Posts:       posts,
 			RecentPosts: posts,
 			Profile:     config.Profile,
@@ -132,6 +134,7 @@ func readSiteConfig(path string) (siteConfig, error) {
 
 func readContent(directory string) ([]sourcePage, error) {
 	var pages []sourcePage
+	renderer := markdown.New()
 	err := filepath.WalkDir(directory, func(path string, entry os.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -144,10 +147,15 @@ func readContent(directory string) ([]sourcePage, error) {
 		if err != nil {
 			return err
 		}
-		page, err := parsePage(string(contents))
+		result, err := renderer.Render(contents)
 		if err != nil {
 			return fmt.Errorf("parse %s: %w", path, err)
 		}
+		page, err := sourcePageFromMetadata(result.Frontmatter)
+		if err != nil {
+			return fmt.Errorf("parse %s: %w", path, err)
+		}
+		page.RenderedHTML = template.HTML(result.HTML)
 		page.SourcePath = path
 		if page.URL == "" {
 			page.URL = routeFor(path, directory)
@@ -162,61 +170,36 @@ func readContent(directory string) ([]sourcePage, error) {
 }
 
 func parsePage(contents string) (sourcePage, error) {
-	if !strings.HasPrefix(contents, "---\n") {
-		return sourcePage{}, fmt.Errorf("missing YAML front matter")
+	metadata, body, err := markdown.ParseFrontmatter([]byte(contents))
+	if err != nil {
+		return sourcePage{}, err
 	}
-	parts := strings.SplitN(contents[4:], "\n---\n", 2)
-	if len(parts) != 2 {
-		return sourcePage{}, fmt.Errorf("unterminated YAML front matter")
+	page, err := sourcePageFromMetadata(metadata)
+	if err != nil {
+		return sourcePage{}, err
 	}
-	page := sourcePage{Body: parts[1]}
-	for _, line := range strings.Split(parts[0], "\n") {
-		pair := strings.SplitN(line, ":", 2)
-		if len(pair) != 2 {
-			continue
-		}
-		key, value := strings.TrimSpace(pair[0]), strings.Trim(strings.TrimSpace(pair[1]), "\"'")
-		switch key {
-		case "title":
-			page.Title = value
-		case "description":
-			page.Description = value
-		case "template":
-			page.Template = value
-		case "layout":
-			page.Layout = value
-		case "url":
-			page.URL = value
-		case "robots":
-			page.Robots = value
-		case "ogType":
-			page.OGType = value
-		case "image":
-			page.Image = value
-		case "imageAlt":
-			page.ImageAlt = value
-		case "date":
-			page.Date, _ = time.Parse("2006-01-02", value)
-		case "tags":
-			page.Tags = parseList(value)
-		}
-	}
-	if page.Title == "" || page.Template == "" {
-		return sourcePage{}, fmt.Errorf("front matter requires title and template")
-	}
+	page.Body = string(body)
 	return page, nil
 }
 
-func parseList(value string) []string {
-	value = strings.Trim(value, "[]")
-	if value == "" {
-		return nil
+func sourcePageFromMetadata(metadata markdown.Frontmatter) (sourcePage, error) {
+	if metadata.Title == "" || metadata.Template == "" {
+		return sourcePage{}, fmt.Errorf("frontmatter requires title and template")
 	}
-	items := strings.Split(value, ",")
-	for i := range items {
-		items[i] = strings.Trim(strings.TrimSpace(items[i]), "\"'")
-	}
-	return items
+	return sourcePage{
+		Title:       metadata.Title,
+		Description: metadata.Description,
+		Template:    metadata.Template,
+		Layout:      metadata.Layout,
+		URL:         metadata.URL,
+		Robots:      metadata.Robots,
+		OGType:      metadata.OGType,
+		Image:       metadata.Image,
+		ImageAlt:    metadata.ImageAlt,
+		Date:        metadata.Date,
+		Tags:        metadata.Tags,
+		Draft:       metadata.Draft,
+	}, nil
 }
 
 func routeFor(path, contentRoot string) string {
@@ -286,64 +269,4 @@ func copyTree(source, destination string) error {
 		_, err = io.Copy(output, input)
 		return err
 	})
-}
-
-func renderMarkdown(markdown string) string {
-	var output strings.Builder
-	inList, inParagraph := false, false
-	closeParagraph := func() {
-		if inParagraph {
-			output.WriteString("</p>\n")
-			inParagraph = false
-		}
-	}
-	for _, raw := range strings.Split(markdown, "\n") {
-		line := strings.TrimSpace(raw)
-		switch {
-		case line == "":
-			closeParagraph()
-			if inList {
-				output.WriteString("</ul>\n")
-				inList = false
-			}
-		case strings.HasPrefix(line, "# "):
-			closeParagraph()
-			output.WriteString("<h1>" + html.EscapeString(line[3:]) + "</h1>\n")
-		case strings.HasPrefix(line, "## "):
-			closeParagraph()
-			output.WriteString("<h2>" + html.EscapeString(line[3:]) + "</h2>\n")
-		case strings.HasPrefix(line, "### "):
-			closeParagraph()
-			output.WriteString("<h3>" + html.EscapeString(line[3:]) + "</h3>\n")
-		case strings.HasPrefix(line, "#### "):
-			closeParagraph()
-			output.WriteString("<h4>" + html.EscapeString(line[3:]) + "</h4>\n")
-		case strings.HasPrefix(line, "##### "):
-			closeParagraph()
-			output.WriteString("<h5>" + html.EscapeString(line[3:]) + "</h5>\n")
-		case strings.HasPrefix(line, "###### "):
-			closeParagraph()
-			output.WriteString("<h6>" + html.EscapeString(line[2:]) + "</h6>\n")
-		case strings.HasPrefix(line, "- "):
-			closeParagraph()
-			if !inList {
-				output.WriteString("<ul>\n")
-				inList = true
-			}
-			output.WriteString("<li>" + html.EscapeString(line[2:]) + "</li>\n")
-		default:
-			if !inParagraph {
-				output.WriteString("<p>")
-				inParagraph = true
-			} else {
-				output.WriteByte(' ')
-			}
-			output.WriteString(html.EscapeString(line))
-		}
-	}
-	closeParagraph()
-	if inList {
-		output.WriteString("</ul>\n")
-	}
-	return output.String()
 }
