@@ -6,9 +6,9 @@ site:
   year: 2026
   url: "__GECKO_SITE_URL__"
   baseURL: "__GECKO_BASE_URL__"
-  logo: "/favicon.ico"
-  stylesheet: "/assets/css/style-dark.css"
-  favicon: "/favicon.ico"
+  logo: "favicon.ico"
+  stylesheet: "assets/css/style-dark.css"
+  favicon: "favicon.ico"
   postsDir: "__GECKO_POSTS_DIR__"
   timezone: "__GECKO_TIMEZONE__"
   seo:
@@ -16,7 +16,7 @@ site:
     description: "__GECKO_SITE_DESCRIPTION__"
     keywords: ["Portfolio", "Open Source", "Go", "Web Development"]
     robots: "index, follow"
-    image: "/favicon.ico"
+    image: "favicon.ico"
     imageAlt: "__GECKO_SITE_TITLE__ portfolio"
     imageWidth: 1200
     imageHeight: 630

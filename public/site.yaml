@@ -6,9 +6,9 @@ site:
   year: 2026
   url: "https://gecko-ssg.github.io/gecko/"
   baseURL: ""
-  logo: "/favicon.ico"
-  stylesheet: "/assets/css/style-dark.css"
-  favicon: "/favicon.ico"
+  logo: "favicon.ico"
+  stylesheet: "assets/css/style-dark.css"
+  favicon: "favicon.ico"
   # postsDir: "content/posts"
   timezone: "Asia/Kolkata"
   seo:
@@ -16,7 +16,7 @@ site:
     description: "Gecko official site"
     keywords: ["Portfolio", "Open Source", "Go", "Web Development"]
     robots: "index, follow"
-    image: "/favicon.ico"
+    image: "favicon.ico"
     imageAlt: "Gecko portfolio"
     imageWidth: 1200
     imageHeight: 630
