@@ -44,10 +44,12 @@ type sourcePage struct {
 	Body, SourcePath                                                           string
 	RenderedHTML                                                               template.HTML
 	Draft                                                                      bool
+	Portfolio                                                                  config.Portfolio
 }
 
 var buildCmd = &cobra.Command{
 	Use: "build", Short: "Build the site into dist",
+	Aliases: []string{"compile", "render", "dist"},
 	Long: "Render Markdown and Go HTML templates into static files in dist/ and copy assets and static files.",
 	Args: cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -117,9 +119,9 @@ func buildSiteTo(root, dist string) error {
 			Content:     page.RenderedHTML,
 			Posts:       posts,
 			RecentPosts: posts,
-			Profile:     config.Profile,
-			Projects:    config.Projects,
-			Experience:  config.Experience,
+			Profile:     page.Portfolio.Profile,
+			Projects:    page.Portfolio.Projects,
+			Experience:  page.Portfolio.Experience,
 		}
 		if err := renderPage(root, dist, page, data); err != nil {
 			return err
@@ -186,6 +188,10 @@ func sourcePageFromMetadata(metadata markdown.Frontmatter) (sourcePage, error) {
 	if metadata.Title == "" || metadata.Template == "" {
 		return sourcePage{}, fmt.Errorf("frontmatter requires title and template")
 	}
+	portfolio, err := config.DecodePortfolio(metadata.Data)
+	if err != nil {
+		return sourcePage{}, err
+	}
 	return sourcePage{
 		Title:       metadata.Title,
 		Description: metadata.Description,
@@ -199,6 +205,7 @@ func sourcePageFromMetadata(metadata markdown.Frontmatter) (sourcePage, error) {
 		Date:        metadata.Date,
 		Tags:        metadata.Tags,
 		Draft:       metadata.Draft,
+		Portfolio:   portfolio,
 	}, nil
 }
 

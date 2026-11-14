@@ -1,0 +1,10 @@
+{{define "content"}}
+<article class="article">
+  <header class="article-header">
+    <h1>{{.Title}}</h1>
+    {{if .Description}}<p class="article-description">{{.Description}}</p>{{end}}
+  </header>
+  <div class="article-content">{{.Content}}</div>
+</article>
+{{end}}
+{{template "base" .}}

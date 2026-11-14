@@ -26,6 +26,7 @@ const liveReloadPath = "/__dev/events"
 
 var devCmd = &cobra.Command{
 	Use:   "dev",
+	Aliases: []string{"serve"},
 	Short: "Build and serve the site with live updates",
 	Args:  cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {

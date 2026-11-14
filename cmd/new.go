@@ -17,7 +17,7 @@ import (
 
 var contentSlugPattern = regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`)
 
-var newCmd = &cobra.Command{Use: "new", Short: "Create content", Args: cobra.NoArgs}
+var newCmd = &cobra.Command{Use: "new", Aliases: []string{"add"}, Short: "Create content", Args: cobra.NoArgs}
 var newPageCmd = &cobra.Command{
 	Use: "page <title>", Short: "Create a Markdown page", Args: cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -65,7 +65,18 @@ func createContent(cmd *cobra.Command, title string, post bool) error {
 		}
 		templateName, layout = "post", "post"
 	}
-	if err := os.MkdirAll(directory, 0o755); err != nil {
+	if post {
+		info, err := os.Stat(directory)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return fmt.Errorf("post directory %q does not exist; use the blog template or create the directory", filepath.ToSlash(strings.TrimPrefix(directory, root+string(filepath.Separator))))
+			}
+			return fmt.Errorf("check post directory: %w", err)
+		}
+		if !info.IsDir() {
+			return fmt.Errorf("post path %q is not a directory", directory)
+		}
+	} else if err := os.MkdirAll(directory, 0o755); err != nil {
 		return fmt.Errorf("create content directory: %w", err)
 	}
 	filename := filepath.Join(directory, slug+".md")

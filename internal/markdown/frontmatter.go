@@ -11,18 +11,19 @@ import (
 
 // Frontmatter contains metadata shared by Gecko's content pages.
 type Frontmatter struct {
-	Title       string    `yaml:"title"`
-	Description string    `yaml:"description"`
-	Date        time.Time `yaml:"date"`
-	Draft       bool      `yaml:"draft"`
-	Template    string    `yaml:"template"`
-	Layout      string    `yaml:"layout"`
-	URL         string    `yaml:"url"`
-	Robots      string    `yaml:"robots"`
-	OGType      string    `yaml:"ogType"`
-	Image       string    `yaml:"image"`
-	ImageAlt    string    `yaml:"imageAlt"`
-	Tags        []string  `yaml:"tags"`
+	Title       string         `yaml:"title"`
+	Description string         `yaml:"description"`
+	Date        time.Time      `yaml:"date"`
+	Draft       bool           `yaml:"draft"`
+	Template    string         `yaml:"template"`
+	Layout      string         `yaml:"layout"`
+	URL         string         `yaml:"url"`
+	Robots      string         `yaml:"robots"`
+	OGType      string         `yaml:"ogType"`
+	Image       string         `yaml:"image"`
+	ImageAlt    string         `yaml:"imageAlt"`
+	Tags        []string       `yaml:"tags"`
+	Data        map[string]any `yaml:",inline"`
 }
 
 // ParseFrontmatter separates YAML metadata from the Markdown body.

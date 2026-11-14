@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-This is the Go-based `gecko` static site generator. `main.go` starts the CLI, and `cmd/` contains Cobra commands and their tests. The embedded starter project lives in `cmd/templates/portfolio/`: Markdown content, Go `html/template` layouts, CSS, and static files such as `favicon.ico`. Keep new commands in focused files (for example, `cmd/clean.go`) and tests beside their implementation (`*_test.go`).
+This is the Go-based `gecko` static site generator. `main.go` starts the CLI, and `cmd/` contains Cobra commands and their tests. Embedded templates live in `cmd/templates/blog/` and `cmd/templates/starter/`; each contains Markdown content, Go `html/template` layouts, CSS, and static files such as `favicon.ico`. Keep new commands in focused files (for example, `cmd/clean.go`) and tests beside their implementation (`*_test.go`).
 
 ## Build, Test, and Development
 
@@ -22,7 +22,7 @@ Use idiomatic Go, format with `gofmt`, and keep package names lowercase. Exporte
 
 ## Template and Content Changes
 
-Keep starter paths stable because `gecko init` embeds and copies the entire portfolio tree. HTML layouts use Go `html/template` blocks; content uses Markdown with YAML front matter. Put the default site icon at `cmd/templates/portfolio/static/favicon.ico` so builds copy it to the published site root. Test changes to template output through the shared build pipeline.
+Keep template paths stable because `gecko init` embeds and copies the selected template tree. HTML layouts use Go `html/template` blocks; content uses Markdown with YAML front matter. Site-wide settings and asset URLs belong in `site.yaml`; homepage profile, projects, and experience belong in `content/index.md` front matter. Put the site icon under each template's `static/favicon.ico` so builds copy it to the published site root.
 
 ## Commits and Pull Requests
 

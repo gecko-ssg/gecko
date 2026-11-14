@@ -27,7 +27,7 @@ import (
 
 const defaultProjectName = "my-app"
 
-var availableTemplates = []string{"portfolio"}
+var availableTemplates = []string{"blog", "starter"}
 
 var projectNamePattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]*$`)
 
@@ -39,6 +39,7 @@ var initTemplate string
 
 var initCmd = &cobra.Command{
 	Use:   "init [project-name]",
+	Aliases: []string{"initialize [project-name]"},
 	Short: "Create a new Gecko site",
 	Long:  "Create a new Gecko site from an embedded starter template. No network connection is required.",
 	Args:  cobra.MaximumNArgs(1),
@@ -54,7 +55,7 @@ var initCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().BoolVar(&initGit, "git", false, "Initialize a Git repository")
-	initCmd.Flags().StringVar(&initTemplate, "template", "portfolio", "Choose a starter template")
+	initCmd.Flags().StringVar(&initTemplate, "template", "blog", "Choose a starter template")
 }
 
 func createProject(cmd *cobra.Command, name, templateName string, initializeGit bool) error {
@@ -222,7 +223,7 @@ func defaultSiteConfigValues(projectName string) map[string]string {
 	title := siteTitle(projectName)
 	return map[string]string{
 		"__GECKO_SITE_TITLE__":       title,
-		"__GECKO_SITE_DESCRIPTION__": "Personal portfolio, projects, experience, and writing.",
+		"__GECKO_SITE_DESCRIPTION__": "A personal site for projects, experience, and ideas.",
 		"__GECKO_LANGUAGE__":         "en",
 		"__GECKO_AUTHOR__":           "",
 		"__GECKO_SITE_URL__":         "https://example.com",

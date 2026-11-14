@@ -27,6 +27,10 @@ cd my-site
 gecko dev
 ```
 
+The default `blog` template includes a home page, blog listing, and sample post.
+Use `gecko init my-site --template starter` for the same portfolio-style home
+page without blog content or post layouts.
+
 `gecko dev` builds the site and starts the development server. When you are
 ready to publish, run `gecko build`; Gecko writes the generated website to
 `dist/`. Use `gecko preview` to serve a previously built site and `gecko clean`
@@ -40,7 +44,7 @@ A site created with `gecko init` has this structure:
 my-site/
 ├── site.yaml                  # Site-wide settings
 ├── content/
-│   ├── index.md               # Home page front matter and Markdown source
+│   ├── index.md               # Home page, portfolio data, and Markdown content
 │   ├── blog.md                # Blog listing page
 │   └── posts/                 # Blog posts (configured by site.postsDir)
 ├── layouts/
@@ -51,20 +55,22 @@ my-site/
 │   ├── blog.html              # Blog listing markup
 │   └── page.html              # Standard page markup
 ├── assets/
-│   └── css/style.css          # Stylesheet, copied to dist/assets/
+│   ├── css/style-dark.css     # Default stylesheet, copied to dist/assets/
+│   └── example.img            # Sample homepage image
 ├── static/
 │   └── favicon.ico            # Static files, copied to the dist/ root
 └── dist/                      # Generated site; recreated by gecko build
 ```
 
-`site.yaml` holds global settings such as the title, description, author,
-language, site URL, base URL, theme color, and `postsDir`. Content files are
+`site.yaml` holds global settings and shared asset links such as the title,
+description, author, language, site URL, base URL, stylesheet, favicon, SEO
+metadata, theme color, and `postsDir`. Content files are
 Markdown with YAML front matter between `---` lines. The `template` field
 selects a file in `templates/`; posts use the post layout in `layouts/`.
 `layouts/base.html` provides the shared page shell, while the selected template
-provides the page body. In the starter portfolio, the homepage sections are
-defined in `templates/index.html`; its Markdown body appears only if that
-template renders `.Content`. Edit `assets/` for files that belong under
+provides the page body. In the `blog` template, homepage sections are
+defined in `templates/index.html`; both homepage templates render `.Content`
+from `content/index.md`. Edit `assets/` for files that belong under
 `dist/assets/` and `static/` for files copied unchanged to the published site
 root.
 
@@ -91,16 +97,20 @@ special `post` template uses `layouts/post.html`.
 
 ### Configure portfolio content
 
-The starter portfolio reads its profile, project cards, and experience timeline
-from top-level `profile`, `projects`, and `experience` sections in `site.yaml`.
-For example:
+The `blog` and `starter` templates read the profile, project cards, and
+experience timeline from the home page front matter in `content/index.md`.
+Keep this data with the page that displays it:
 
 ```yaml
+---
+title: "Home"
+description: "A personal portfolio."
+template: "index"
 profile:
   name: "Your Name"
   headline: "Software Engineer"
   bio: "A short introduction about yourself."
-  image: "/images/profile.png"
+  image: "/assets/example.img"
   email: "hello@example.com"
   socials:
     - name: GitHub
@@ -121,11 +131,24 @@ experience:
     role: "Software Engineer"
     period: "2025 - Present"
     description: "A short description of your work."
+---
 ```
 
-Put profile and project images under `static/` or `assets/`, then use their
-published paths in the configuration. Gecko passes these values to the
-homepage template as `.Profile`, `.Projects`, and `.Experience`.
+Write the Markdown body after the closing `---`. For example:
+
+```md
+# About
+
+This supports **bold**, *italic*, `inline code`, lists, links, images, tables,
+task lists, and fenced code blocks.
+
+![Example image](assets/example.img)
+```
+
+Put profile and project images under `assets/` and use paths such as
+`/assets/example.img` in front matter. The template includes that example
+image. The Markdown body in `content/index.md` demonstrates formatting, lists,
+links, images, tables, task lists, and code blocks.
 
 ## Add a page
 
@@ -144,13 +167,16 @@ its title, optional description, and body. The default page template is
 ## Add a post
 
 ```sh
-gecko new post "My First Post"
+gecko add post "My First Post"
 ```
 
 Gecko reads `site.postsDir` from `site.yaml` (default: `content/posts`) and
-creates a Markdown file there. Add the post description and write its body;
-the command supplies the date, URL, and `post` template/layout metadata. Posts
-are rendered with `layouts/post.html` and appear in the site's blog listing.
+requires that directory to exist before it creates a Markdown file there. The
+`starter` template omits blog content and post layouts; choose the `blog`
+template for a ready-to-use blog. Add a description
+and write the body; the command supplies the date, URL, and `post` template
+metadata. Blog posts are rendered with `layouts/post.html` and listed on the
+blog page.
 
 ## Customize and publish
 
