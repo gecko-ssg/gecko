@@ -1,3 +1,5 @@
 my-app
 *test.go
 dist
+
+public/public
