@@ -1,31 +1,26 @@
 site:
   title: "Gecko"
-  description: "A small, fast static site generator for building expressive, content-first websites with Go."
+  description: "Gecko official site"
   language: "en"
-  author: "Gecko contributors"
+  author: "dos"
   year: 2026
-  url: ""
-  baseURL: "/gecko"
+  url: "https://gecko-ssg.github.io/gecko/"
+  baseURL: ""
   logo: "/favicon.ico"
-  postsDir: "content/posts"
+  stylesheet: "/assets/css/style-dark.css"
+  favicon: "/favicon.ico"
+  # postsDir: "content/posts"
   timezone: "Asia/Kolkata"
   seo:
     title: "Gecko"
-    description: "A small, fast static site generator for building expressive, content-first websites with Go."
-    keywords: ["Gecko", "Static Site Generator", "Go", "Markdown", "Open Source"]
+    description: "Gecko official site"
+    keywords: ["Portfolio", "Open Source", "Go", "Web Development"]
     robots: "index, follow"
     image: "/favicon.ico"
-    imageAlt: "Gecko logo"
+    imageAlt: "Gecko portfolio"
     imageWidth: 1200
     imageHeight: 630
     openGraph: { type: "website", locale: "en_US", siteName: "Gecko" }
     twitter: { card: "summary_large_image", site: "", creator: "" }
     verification: { google: "", bing: "" }
-  theme:
-    color: "#0b0d12"
-    accent: "#a78bfa"
-    scheme: "dark"
-  socials:
-    github: "https://github.com/gecko-ssg/gecko"
-    linkedin: ""
-    x: ""
+  theme: { color: "#0d1117", accent: "#58a6ff", scheme: "dark" }

@@ -4,30 +4,30 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{if .Title}}{{.Title}}{{if ne .Title .Site.Title}} · {{.Site.Title}}{{end}}{{else}}{{.Site.SEO.Title}}{{end}}</title>
+    <title>{{if .Title}}{{.Title}} · {{.Site.Title}}{{else}}{{.Site.SEO.Title}}{{end}}</title>
     <meta name="description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
     <meta name="author" content="{{.Site.Author}}">
     <meta name="robots" content="{{if .Robots}}{{.Robots}}{{else}}{{.Site.SEO.Robots}}{{end}}">
-    {{if .Canonical}}<link rel="canonical" href="{{.Canonical}}">{{else if and .URL .Site.URL}}<link rel="canonical" href="{{.Site.URL}}{{.URL}}">{{end}}
+    {{if .Canonical}}<link rel="canonical" href="{{.Canonical}}">{{else if .URL}}<link rel="canonical" href="{{.Site.URL}}{{.URL}}">{{end}}
     <meta property="og:title" content="{{if .Title}}{{.Title}}{{else}}{{.Site.SEO.Title}}{{end}}">
     <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
-    <meta property="og:type" content="{{if .OGType}}{{.OGType}}{{else if .Site.SEO.OpenGraph.Type}}{{.Site.SEO.OpenGraph.Type}}{{else}}website{{end}}">
-    <meta property="og:site_name" content="{{.Site.Title}}">
-    <meta property="og:locale" content="en_US">
-    {{if .Site.URL}}<meta property="og:url" content="{{.Site.URL}}{{.URL}}"><meta property="og:image" content="{{.Site.URL}}{{if .Image}}{{.Image}}{{else}}{{.Site.SEO.Image}}{{end}}">{{end}}
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:type" content="{{if .OGType}}{{.OGType}}{{else}}{{.Site.SEO.OpenGraph.Type}}{{end}}">
+    <meta property="og:site_name" content="{{.Site.SEO.OpenGraph.SiteName}}">
+    <meta property="og:locale" content="{{.Site.SEO.OpenGraph.Locale}}">
+    <meta property="og:image" content="{{.Site.URL}}{{if .Image}}{{.Image}}{{else}}{{.Site.SEO.Image}}{{end}}">
+    <meta name="twitter:card" content="{{.Site.SEO.Twitter.Card}}">
     <meta name="twitter:title" content="{{if .Title}}{{.Title}}{{else}}{{.Site.SEO.Title}}{{end}}">
     <meta name="twitter:description" content="{{if .Description}}{{.Description}}{{else}}{{.Site.SEO.Description}}{{end}}">
     <meta name="theme-color" content="{{.Site.Theme.Color}}">
-    <link rel="stylesheet" href="{{.Site.BaseURL}}/assets/css/style.css">
-    <link rel="icon" type="image/x-icon" href="{{.Site.BaseURL}}/favicon.ico">
+    <link rel="stylesheet" href="{{.Site.BaseURL}}{{.Site.Stylesheet}}">
+    <link rel="icon" type="image/x-icon" href="{{.Site.BaseURL}}{{.Site.Favicon}}">
     {{block "head" .}}{{end}}
   </head>
   <body>
     <header class="site-header">
       <nav class="nav container" aria-label="Main navigation">
         <a class="brand" href="{{.Site.BaseURL}}/"><img class="brand-logo" src="{{.Site.BaseURL}}{{.Site.Logo}}" alt="">{{.Site.Title}}</a>
-        <div class="nav-links"><a href="{{.Site.BaseURL}}/#features">Features</a><a href="{{.Site.BaseURL}}/#quickstart">Quick start</a><a href="{{.Site.BaseURL}}/blog/">Writing</a><a class="nav-source" href="https://github.com/gecko-ssg/gecko">GitHub <span aria-hidden="true">↗</span></a></div>
+        <div class="nav-links"><a href="{{.Site.BaseURL}}/">Home</a><a href="{{.Site.BaseURL}}/markdown">Markdown Guide</a><a href="https://github.com/gecko-ssg/gecko">Github Source</a></div>
       </nav>
     </header>
     <main class="container">{{template "content" .}}</main>
