@@ -25,10 +25,10 @@ import (
 const liveReloadPath = "/__dev/events"
 
 var devCmd = &cobra.Command{
-	Use:   "dev",
+	Use:     "dev",
 	Aliases: []string{"serve"},
-	Short: "Build and serve the site with live updates",
-	Args:  cobra.NoArgs,
+	Short:   "Build and serve the site with live updates",
+	Args:    cobra.NoArgs,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		directory, _ := cmd.Flags().GetString("dir")
 		output, _ := cmd.Flags().GetString("output")
@@ -80,7 +80,13 @@ func runDev(ctx context.Context, directory, output string, port int, logOutput i
 		return fmt.Errorf("start server: %w", err)
 	}
 	go func() { serverErrors <- server.Serve(listener) }()
-	defer server.Shutdown(context.Background())
+	defer func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+		if err := server.Shutdown(shutdownCtx); err != nil {
+			_ = server.Close()
+		}
+	}()
 
 	watcher, err := newProjectWatcher(root)
 	if err != nil {
